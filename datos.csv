@@ -1,0 +1,37 @@
+Modelo,mpx megapixeles,Exterior/Interior,Material,Tipo,Color/IR,Audio,Alcance IR (m),IP/BNC,IA,Precio aprox. (COP)
+DH-HAC-HFW1200TP-S5,5,Exterior,Plastico,Bala,IR,No,20,BNC,No,90.000-130.000
+DH-IPC-HDW5541T-ZE,8,Exterior,Metal,Domo,Full Color,Si,50,IP,Si,850.000-950.000
+DH-HAC-HFW1200TLP-S5,2,Exterior,Plastico,Bala,IR,No,20,BNC,No,80.000-120.000
+DH-IPC-HFW5241E-ZE,8,Exterior,Metal,Bala,Full Color,Si,80,IP,Si,700.000-800.000
+DH-IPC-HDW2831P-S-S2,8,Interior,Metal,Domo,IR,No,30,IP,Si,420.000-520.000
+DH-IPC-HDW2831E-S-S2,8,Interior,Metal,Domo,IR,No,30,IP,Si,410.000-510.000
+DH-IPC-HDW2831EP-S-S2,5,Interior,Metal,Domo,IR,No,30,IP,Si,400.000-500.000
+DH-IPC-HFW2831T-ZS-S2,2,Exterior,Metal,Bala,IR,No,60,IP,Sí,400.000 - 500.000
+DH-IPC-HDBW2831E-S-S2,2,Interior,Metal,Domo,IR,no,30,IP,Si,380.000-480.000
+DH-HAC-HFW2802E,2,Exterior,Metal,Bala,IR,No,60,BNC,Si,350.000 - 450.000
+DH-IPC-HFW2531P-S-S2,8,Exterior,Metal,Bala,IR,No,50,IP,Si,340.000-400.000
+DH-HAC-HFW2800T-S5,8,Exterior,Plastico,Bala,IR,No,30,BNC,Si,330.000-410.000
+DH-IPC-HFW2531E-S-S2,5,Exterior,Metal,Bala,IR,No,50,IP,Si,330.000-390.000
+DH-HAC-HFW2800TP-S5,5,Exterior,Plastico,Bala,IR,No,30,BNC,Si,320.000-400.000
+DH-IPC-HFW2531EP-S-S2,5,Exterior,Metal,Bala,IR,No,50,IP,Si,320.000-380.000
+DH-HAC-HFW2800TLP-S5,5,Exterior,Plastico,Bala,IR,No,30,BNC,Si,300.000-380.000
+DH-IPC-HDW2531T-S-S2,2,Exterior,Metal,Domo,IR,No,30,IP,Si,300.000-350.000
+DH-IPC-HFW2231T-S-S2,2,Exterior,Metal,Bala,IR,No,30,IP,Si,230.000-280.000
+DH-IPC-HDW1530TL-S5,2,Exterior,Plástico,Domo,IR,No,30,IP,No,200.000 - 250.000
+DH-HAC-HFW1500CM,2,Exterior,Metal,Bala,IR,No,40,BNC,No,180.000 - 230.000
+DH-HAC-HDW1500T-S5,8,Exterior,Plastico,Domo,IR,No,25,BNC,No,170.000-210.000
+DH-HAC-HDW1500TP-S5,5,Exterior,Plastico,Domo,IR,No,25,BNC,No,160.000-200.000
+DH-IPC-HDBW1230P-S5,8,Interior,Plastico,Domo,IR,No,30,IP,No,150.000-200.000
+DH-HAC-HDW1500TLP-S5,5,Exterior,Plastico,Domo,IR,No,25,BNC,No,150.000-190.000
+DH-IPC-HFW1230S1-S5,2,Exterior,Plástico,Bala,IR,No,30,IP,No,150.000 - 200.000
+DH-IPC-HDBW1230E-S5,5,Interior,Plastico,Domo,IR,No,30,IP,No,140.000-190.000
+DH-IPC-HDBW1230EP-S5,5,Interior,Plastico,Domo,IR,No,30,IP,No,130.000-180.000
+DH-HAC-HFW1200T-S5,8,Exterior,Plastico,Bala,IR,No,20,BNC,No,100.000-140.000
+DH-HAC-HDW1200EM,2,Exterior,Metal,Domo,IR,No,30,BNC,No,100.000 - 150.000
+DH-IPC-HDBW5842T-ZE,8,Exterior,Metal,Domo,Full Color,Si,50,IP,Si,1.000.000-1.200.000
+,,,,,,,,,,
+ITC215-PW6M-IRLZF-B,2,Bala,Exterior,50,Varifocal motorizada,Sí,"Reconocimiento de matrículas, detección de vehículos, marca, modelo, color",1.500.000 - 2.000.000,,
+ITC237-PU1A-IR,2,Bala,Exterior,40,Fijo,si,"Reconocimiento de matriculas, lista blanca y negra, captura de instantaneas.",1.800.000 - 2.500.000,,
+ITC952-AU3A-LR,2,Bala,Exterior,40,Varifocal motorizada,Si,"Reconocimiento de matrículas, análisis de tráfico, detección de eventos",2.500.000 - 3.000.000,,
+ITC903-RU1A-LR,2,Bala,Exterior,40,Fijo,Si,"Reconocimiento de matrículas, lista blanca y negra, captura de instantaneas.",2.000.000 - 2.800.000,,
+ITC913-RU1A-LR,2,Bala,Exterior,40,Fijo,Si,"Reconocimiento de matrículas, lista blanca y negra, captura de instantaneas.",2.200.000 - 3.000.000,,
