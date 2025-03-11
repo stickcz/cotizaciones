@@ -1,0 +1,1797 @@
+# Proyecto Completo - Generado el Mon Mar 10 22:37:15 2025
+# Estructura y contenido de archivos clave (sin bases de datos)
+
+
+================================================================================
+# Archivo: app.js
+================================================================================
+
+const express = require('express');
+const sqlite3 = require('sqlite3').verbose();
+const app = express();
+const path = require('path');
+
+// Configuración de Express
+app.set('view engine', 'ejs');
+app.use(express.static('public'));
+app.use(express.urlencoded({ extended: true }));
+app.use('/node_modules', express.static(path.join(__dirname, 'node_modules')));
+
+// Conectar a la base de datos
+const db = new sqlite3.Database('cotizaciones.db', (err) => {
+    if (err) console.error('Error al conectar a la base de datos:', err);
+    else console.log('Conectado a la base de datos');
+});
+
+// Crear tablas
+db.serialize(() => {
+    // Tabla de cámaras
+    db.run(`CREATE TABLE IF NOT EXISTS cameras (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        model TEXT,
+        mp INTEGER,
+        usage TEXT,
+        material TEXT,
+        type TEXT,
+        ir_color TEXT,
+        audio TEXT,
+        ir_range INTEGER,
+        connection TEXT,
+        ai TEXT,
+        price TEXT
+    )`);
+
+    // Tabla de grabadores
+    db.run(`CREATE TABLE IF NOT EXISTS recorders (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        model TEXT,
+        channels INTEGER,
+        resolution TEXT,
+        technology TEXT,
+        price TEXT
+    )`);
+
+    // Tabla de costos de instalación
+    db.run(`CREATE TABLE IF NOT EXISTS installation_costs (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        condition TEXT,
+        price TEXT
+    )`);
+
+    // Tabla de accesorios
+    db.run(`CREATE TABLE IF NOT EXISTS accessories (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        price TEXT
+    )`);
+
+    // Tabla de cables
+    db.run(`CREATE TABLE IF NOT EXISTS cables (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        type TEXT,
+        category TEXT,
+        price_per_meter TEXT
+    )`);
+
+    // Tabla de protección de cables
+    db.run(`CREATE TABLE IF NOT EXISTS cable_protection (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        type TEXT,
+        capacity TEXT,
+        price_per_2m TEXT
+    )`);
+
+    // Tabla de clientes
+    db.run(`CREATE TABLE IF NOT EXISTS customers (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        id_number TEXT,
+        phone TEXT,
+        address TEXT,
+        email TEXT
+    )`);
+
+    // Tabla de cotizaciones
+    db.run(`CREATE TABLE IF NOT EXISTS quotes (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        date TEXT,
+        customer_id INTEGER,
+        FOREIGN KEY (customer_id) REFERENCES customers(id)
+    )`);
+
+    // Tabla de ítems de cotización
+    db.run(`CREATE TABLE IF NOT EXISTS quote_items (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        quote_id INTEGER,
+        item_type TEXT,
+        item_id INTEGER,
+        quantity INTEGER,
+        FOREIGN KEY (quote_id) REFERENCES quotes(id)
+    )`);
+
+    // Tabla de información de la empresa
+    db.run(`CREATE TABLE IF NOT EXISTS company_info (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        city TEXT,
+        date TEXT,
+        name TEXT,
+        phone TEXT,
+        email TEXT,
+        website TEXT
+    )`);
+
+    // Insertar datos iniciales de la empresa si no existen
+    db.get('SELECT * FROM company_info WHERE id = 1', (err, row) => {
+        if (!row) {
+            db.run(
+                'INSERT INTO company_info (city, date, name, phone, email, website) VALUES (?, ?, ?, ?, ?, ?)',
+                ['Zipaquirá', '27 de febrero de 2025', 'Cotizaciones de Seguridad XYZ', '(123) 456-7890', 'info@seguridadxyz.com', 'www.seguridadxyz.com']
+            );
+        }
+    });
+});
+
+// Middleware de manejo de errores
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Algo salió mal');
+});
+
+// Ruta: Dashboard
+app.get('/', (req, res) => {
+    res.render('dashboard');
+});
+
+// Rutas de gestión (ejemplo para cámaras, replicar para otras tablas)
+app.get('/manage_cameras', (req, res) => {
+    db.all('SELECT * FROM cameras', (err, cameras) => {
+        if (err) throw err;
+        res.render('manage_cameras', { cameras: cameras || [] });
+    });
+});
+
+app.post('/manage_cameras', (req, res) => {
+    const { model, mp, usage, material, type, ir_color, audio, ir_range, connection, ai, price } = req.body;
+    db.run(
+        'INSERT INTO cameras (model, mp, usage, material, type, ir_color, audio, ir_range, connection, ai, price) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [model, mp, usage, material, type, ir_color, audio, ir_range, connection, ai, price],
+        (err) => {
+            if (err) throw err;
+            res.redirect('/manage_cameras');
+        }
+    );
+});
+
+// Rutas de gestión para grabadores
+app.get('/manage_recorders', (req, res) => {
+    db.all('SELECT * FROM recorders', (err, recorders) => {
+        if (err) throw err;
+        res.render('manage_recorders', { recorders: recorders || [] });
+    });
+});
+
+app.post('/manage_recorders', (req, res) => {
+    const { model, channels, resolution, technology, price } = req.body;
+    db.run(
+        'INSERT INTO recorders (model, channels, resolution, technology, price) VALUES (?, ?, ?, ?, ?)',
+        [model, channels, resolution, technology, price],
+        (err) => {
+            if (err) throw err;
+            res.redirect('/manage_recorders');
+        }
+    );
+});
+
+// Rutas de gestión para costos de instalación
+app.get('/manage_installation', (req, res) => {
+    db.all('SELECT * FROM installation_costs', (err, installation_costs) => {
+        if (err) throw err;
+        res.render('manage_installation', { installation_costs: installation_costs || [] });
+    });
+});
+
+app.post('/manage_installation', (req, res) => {
+    const { condition, price } = req.body;
+    db.run(
+        'INSERT INTO installation_costs (condition, price) VALUES (?, ?)',
+        [condition, price],
+        (err) => {
+            if (err) throw err;
+            res.redirect('/manage_installation');
+        }
+    );
+});
+
+// Rutas de gestión para accesorios
+app.get('/manage_accessories', (req, res) => {
+    db.all('SELECT * FROM accessories', (err, accessories) => {
+        if (err) throw err;
+        res.render('manage_accessories', { accessories: accessories || [] });
+    });
+});
+
+app.post('/manage_accessories', (req, res) => {
+    const { name, price } = req.body;
+    db.run(
+        'INSERT INTO accessories (name, price) VALUES (?, ?)',
+        [name, price],
+        (err) => {
+            if (err) throw err;
+            res.redirect('/manage_accessories');
+        }
+    );
+});
+
+// Rutas de gestión para cables
+app.get('/manage_cables', (req, res) => {
+    db.all('SELECT * FROM cables', (err, cables) => {
+        if (err) throw err;
+        res.render('manage_cables', { cables: cables || [] });
+    });
+});
+
+app.post('/manage_cables', (req, res) => {
+    const { type, category, price_per_meter } = req.body;
+    db.run(
+        'INSERT INTO cables (type, category, price_per_meter) VALUES (?, ?, ?)',
+        [type, category, price_per_meter],
+        (err) => {
+            if (err) throw err;
+            res.redirect('/manage_cables');
+        }
+    );
+});
+
+// Rutas de gestión para protección de cables
+app.get('/manage_protection', (req, res) => {
+    db.all('SELECT * FROM cable_protection', (err, cable_protection) => {
+        if (err) throw err;
+        res.render('manage_protection', { cable_protection: cable_protection || [] });
+    });
+});
+
+app.post('/manage_protection', (req, res) => {
+    const { type, capacity, price_per_2m } = req.body;
+    db.run(
+        'INSERT INTO cable_protection (type, capacity, price_per_2m) VALUES (?, ?, ?)',
+        [type, capacity, price_per_2m],
+        (err) => {
+            if (err) throw err;
+            res.redirect('/manage_protection');
+        }
+    );
+});
+
+// Ruta: Crear Cotización
+app.get('/create_quote', (req, res) => {
+    db.all('SELECT * FROM cameras', (err, cameras) => {
+        if (err) throw err;
+        db.all('SELECT * FROM recorders', (err, recorders) => {
+            if (err) throw err;
+            db.all('SELECT * FROM installation_costs', (err, installation_costs) => {
+                if (err) throw err;
+                db.all('SELECT * FROM accessories', (err, accessories) => {
+                    if (err) throw err;
+                    db.all('SELECT * FROM cables', (err, cables) => {
+                        if (err) throw err;
+                        db.all('SELECT * FROM cable_protection', (err, protection) => {
+                            if (err) throw err;
+                            db.all('SELECT * FROM customers', (err, customers) => {
+                                if (err) throw err;
+                                res.render('create_quote', {
+                                    cameras, recorders, installation_costs, accessories, cables, protection, customers
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+});
+
+app.post('/create_quote', (req, res) => {
+    const { customer_id, new_customer_name, new_customer_id_number, new_customer_phone, new_customer_address, new_customer_email,
+            cameras, recorders, installation_costs, accessories, cables, cable_protection, quantities } = req.body;
+    const date = new Date().toLocaleDateString('es-ES');
+
+    let finalCustomerId;
+    if (customer_id) {
+        finalCustomerId = customer_id;
+    } else {
+        db.run(
+            'INSERT INTO customers (name, id_number, phone, address, email) VALUES (?, ?, ?, ?, ?)',
+            [new_customer_name, new_customer_id_number || null, new_customer_phone, new_customer_address || null, new_customer_email || null],
+            function (err) {
+                if (err) throw err;
+                finalCustomerId = this.lastID;
+                createQuote(finalCustomerId);
+            }
+        );
+        return;
+    }
+    createQuote(finalCustomerId);
+
+    function createQuote(customerId) {
+        db.run('INSERT INTO quotes (date, customer_id) VALUES (?, ?)', [date, customerId], function (err) {
+            if (err) throw err;
+            const quoteId = this.lastID;
+            const items = [];
+
+            // Agregar ítems seleccionados
+            if (cameras) cameras.forEach((id, i) => items.push([quoteId, 'camera', id, quantities.cameras[i] || 1]));
+            if (recorders) recorders.forEach((id, i) => items.push([quoteId, 'recorder', id, quantities.recorders[i] || 1]));
+            if (installation_costs) installation_costs.forEach((id, i) => items.push([quoteId, 'installation', id, quantities.installation_costs[i] || 1]));
+            if (accessories) accessories.forEach((id, i) => items.push([quoteId, 'accessory', id, quantities.accessories[i] || 1]));
+            if (cables) cables.forEach((id, i) => items.push([quoteId, 'cable', id, quantities.cables[i] || 1]));
+            if (cable_protection) cable_protection.forEach((id, i) => items.push([quoteId, 'protection', id, quantities.cable_protection[i] || 1]));
+
+            if (items.length === 0) return res.status(400).send('Selecciona al menos un ítem');
+
+            db.run(
+                `INSERT INTO quote_items (quote_id, item_type, item_id, quantity) VALUES ${items.map(() => '(?, ?, ?, ?)').join(',')}`,
+                items.flat(),
+                (err) => {
+                    if (err) throw err;
+                    res.redirect(`/quote/${quoteId}`);
+                }
+            );
+        });
+    }
+});
+
+// Ruta: Ver Cotización
+app.get('/quote/:id', (req, res) => {
+    const quoteId = req.params.id;
+    db.get('SELECT q.*, c.* FROM quotes q JOIN customers c ON q.customer_id = c.id WHERE q.id = ?', [quoteId], (err, quote) => {
+        if (err || !quote) return res.status(404).send('Cotización no encontrada');
+        db.all(
+            `SELECT qi.item_type, qi.quantity, 
+                    c.model AS camera_model, c.price AS camera_price,
+                    r.model AS recorder_model, r.price AS recorder_price,
+                    ic.condition AS installation_condition, ic.price AS installation_price,
+                    a.name AS accessory_name, a.price AS accessory_price,
+                    cb.type AS cable_type, cb.price_per_meter AS cable_price,
+                    cp.type AS protection_type, cp.price_per_2m AS protection_price
+             FROM quote_items qi
+             LEFT JOIN cameras c ON qi.item_type = 'camera' AND qi.item_id = c.id
+             LEFT JOIN recorders r ON qi.item_type = 'recorder' AND qi.item_id = r.id
+             LEFT JOIN installation_costs ic ON qi.item_type = 'installation' AND qi.item_id = ic.id
+             LEFT JOIN accessories a ON qi.item_type = 'accessory' AND qi.item_id = a.id
+             LEFT JOIN cables cb ON qi.item_type = 'cable' AND qi.item_id = cb.id
+             LEFT JOIN cable_protection cp ON qi.item_type = 'protection' AND qi.item_id = cp.id
+             WHERE qi.quote_id = ?`,
+            [quoteId],
+            (err, items) => {
+                if (err) throw err;
+                db.get('SELECT * FROM company_info WHERE id = 1', (err, company) => {
+                    if (err) throw err;
+                    res.render('view_quote', { quote, items, company });
+                });
+            }
+        );
+    });
+});
+
+// Ruta: Lista de Cotizaciones
+app.get('/quotes', (req, res) => {
+    db.all(
+        `SELECT q.id, q.date, c.name 
+         FROM quotes q 
+         JOIN customers c ON q.customer_id = c.id 
+         ORDER BY q.id DESC`, 
+        (err, quotes) => {
+            if (err) throw err;
+            res.render('quotes_list', { quotes: quotes || [] });
+        }
+    );
+});
+
+// Ruta: Gestión de información de la empresa
+app.get('/company_info', (req, res) => {
+    db.get('SELECT * FROM company_info WHERE id = 1', (err, company) => {
+        if (err) throw err;
+        res.render('company_info', { company });
+    });
+});
+
+app.post('/company_info', (req, res) => {
+    const { city, date, name, phone, email, website } = req.body;
+    db.run(
+        'UPDATE company_info SET city = ?, date = ?, name = ?, phone = ?, email = ?, website = ? WHERE id = 1',
+        [city, date, name, phone, email, website],
+        (err) => {
+            if (err) throw err;
+            res.redirect('/company_info');
+        }
+    );
+});
+
+// Iniciar servidor
+app.listen(3000, () => {
+    console.log('Servidor corriendo en http://localhost:3000');
+});
+
+
+================================================================================
+# Archivo: public\cotizaciones_style.css
+================================================================================
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    color: #4A4A4A; /* Gris oscuro */
+}
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 2px solid #4A4A4A;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+.header-left img {
+    max-width: 100px; /* Ajusta según tu logo */
+}
+.header-right {
+    text-align: right;
+    font-size: 12px;
+}
+h1 {
+    text-align: center;
+    color: #003087; /* Azul oscuro */
+    font-size: 24px;
+    font-weight: bold;
+    margin: 20px 0;
+}
+h2 {
+    color: #003087;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 15px 0 10px;
+}
+h3 {
+    color: #003087;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+th, td {
+    border: 1px solid #4A4A4A;
+    padding: 8px;
+    font-size: 12px;
+}
+th {
+    background-color: #D3D3D3; /* Gris claro */
+    font-weight: bold;
+    text-align: center;
+}
+td {
+    text-align: left;
+}
+td.numeric {
+    text-align: center;
+}
+.note {
+    border: 1px solid #4A4A4A;
+    padding: 10px;
+    font-size: 11px;
+    margin: 20px 0;
+}
+.footer {
+    border-top: 2px solid #4A4A4A;
+    text-align: center;
+    font-size: 10px;
+    padding-top: 10px;
+    margin-top: 20px;
+}
+
+================================================================================
+# Archivo: public\style.css
+================================================================================
+
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilos originales para vistas clásicas (cotizaciones, etc.) */
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    color: #4A4A4A; /* Gris oscuro por defecto */
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 2px solid #4A4A4A;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.header-left img {
+    max-width: 100px; /* Ajusta según tu logo */
+}
+
+.header-right {
+    text-align: right;
+    font-size: 12px;
+}
+
+h1 {
+    text-align: center;
+    color: #870000; /* Azul oscuro */
+    font-size: 24px;
+    font-weight: bold;
+    margin: 20px 0;
+}
+
+h2 {
+    color: #870000;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 15px 0 10px;
+}
+
+h3 {
+    color: #870012;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+th, td {
+    border: 1px solid #4A4A4A;
+    padding: 8px;
+    font-size: 12px;
+}
+
+th {
+    background-color: #D3D3D3; /* Gris claro */
+    font-weight: bold;
+    text-align: center;
+}
+
+td {
+    text-align: left;
+}
+
+td.numeric {
+    text-align: center;
+}
+
+.note {
+    border: 1px solid #4A4A4A;
+    padding: 10px;
+    font-size: 11px;
+    margin: 20px 0;
+}
+
+.footer {
+    border-top: 2px solid #4A4A4A;
+    text-align: center;
+    font-size: 10px;
+    padding-top: 10px;
+    margin-top: 20px;
+}
+
+/* Estilos para el Dashboard inspirado en Vision UI */
+body.vision-ui {
+    background: linear-gradient(135deg, #1a1a2e 0%, #3e1616 100%);
+    color: #ffffff;
+    margin: 0; /* Sobreescribe el margen para el dashboard */
+    min-height: 100vh;
+}
+
+.dashboard-wrapper {
+    display: flex;
+    height: 100vh;
+}
+
+.sidenav {
+    width: 250px;
+    background: rgba(35, 23, 23, 0.95);
+    padding: 20px;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+.sidenav-header {
+    margin-bottom: 30px;
+}
+
+.sidenav-header h2 {
+    font-size: 24px;
+    color: #eb0000; /* Azul cian */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.sidenav-menu {
+    list-style: none;
+}
+
+.sidenav-menu li {
+    margin: 15px 0;
+}
+
+.sidenav-menu a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 10px 15px;
+    display: block;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.sidenav-menu a:hover {
+    background: linear-gradient(90deg, #dd1864, #ff0000);
+    color: #ffffff;
+    transform: translateX(5px);
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.navbar {
+    background: rgba(23, 25, 35, 0.95);
+    padding: 15px 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.navbar h1 {
+    font-size: 28px;
+    color: #ffffff; /* Blanco para el dashboard */
+    text-align: center;
+}
+
+.content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.card {
+    background: rgba(34, 36, 48, 0.9);
+    padding: 20px;
+    border-radius: 12px;
+    width: 300px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(5px);
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card h3 {
+    font-size: 20px;
+    color: #00ddeb; /* Azul cian */
+    margin-bottom: 10px;
+}
+
+.card p {
+    font-size: 14px;
+    color: #d1d5db; /* Gris claro */
+}
+
+================================================================================
+# Archivo: views\company_info.ejs
+================================================================================
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Información de la Empresa</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Editar Información de la Empresa</h1>
+        <form action="/company_info" method="POST">
+            <input type="text" name="city" value="<%= company.city %>" required><br>
+            <input type="text" name="date" value="<%= company.date %>" required><br>
+            <input type="text" name="name" value="<%= company.name %>" required><br>
+            <input type="text" name="phone" value="<%= company.phone %>" required><br>
+            <input type="email" name="email" value="<%= company.email %>" required><br>
+            <input type="text" name="website" value="<%= company.website %>" required><br>
+            <button type="submit">Guardar</button>
+        </form>
+    </div>
+</body>
+</html>
+
+================================================================================
+# Archivo: views\create_quote.ejs
+================================================================================
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Cotización</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Crear Cotización</h1>
+        <form action="/create_quote" method="POST">
+            <h2>Cliente</h2>
+            <label>Seleccionar Cliente Existente:</label>
+            <select name="customer_id">
+                <option value="">Nuevo Cliente</option>
+                <% customers.forEach(customer => { %>
+                    <option value="<%= customer.id %>"><%= customer.name %> (<%= customer.phone %>)</option>
+                <% }) %>
+            </select><br>
+            <label>O crear nuevo cliente:</label><br>
+            <input type="text" name="new_customer_name" placeholder="Nombre" required><br>
+            <input type="text" name="new_customer_id_number" placeholder="Identificación (opcional)"><br>
+            <input type="text" name="new_customer_phone" placeholder="Teléfono" required><br>
+            <input type="text" name="new_customer_address" placeholder="Dirección (opcional)"><br>
+            <input type="email" name="new_customer_email" placeholder="Email (opcional)"><br>
+
+            <h2>Cámaras</h2>
+            <% cameras.forEach(camera => { %>
+                <input type="checkbox" name="cameras" value="<%= camera.id %>"> <%= camera.model %> - <%= camera.price %><br>
+                <input type="number" name="quantities[cameras][]" placeholder="Cantidad" min="1"><br>
+            <% }) %>
+
+            <h2>Grabadores</h2>
+            <% recorders.forEach(recorder => { %>
+                <input type="checkbox" name="recorders" value="<%= recorder.id %>"> <%= recorder.model %> - <%= recorder.price %><br>
+                <input type="number" name="quantities[recorders][]" placeholder="Cantidad" min="1"><br>
+            <% }) %>
+
+            <h2>Instalación</h2>
+            <% installation_costs.forEach(cost => { %>
+                <input type="checkbox" name="installation_costs" value="<%= cost.id %>"> <%= cost.condition %> - <%= cost.price %><br>
+                <input type="number" name="quantities[installation_costs][]" placeholder="Cantidad" min="1"><br>
+            <% }) %>
+
+            <h2>Accesorios</h2>
+            <% accessories.forEach(accessory => { %>
+                <input type="checkbox" name="accessories" value="<%= accessory.id %>"> <%= accessory.name %> - <%= accessory.price %><br>
+                <input type="number" name="quantities[accessories][]" placeholder="Cantidad" min="1"><br>
+            <% }) %>
+
+            <h2>Cables</h2>
+            <% cables.forEach(cable => { %>
+                <input type="checkbox" name="cables" value="<%= cable.id %>"> <%= cable.type %> - <%= cable.price_per_meter %>/m<br>
+                <input type="number" name="quantities[cables][]" placeholder="Metros" min="1"><br>
+            <% }) %>
+
+            <h2>Protección de Cables</h2>
+            <% protection.forEach(prot => { %>
+                <input type="checkbox" name="cable_protection" value="<%= prot.id %>"> <%= prot.type %> - <%= prot.price_per_2m %>/2m<br>
+                <input type="number" name="quantities[cable_protection][]" placeholder="Cantidad (2m)" min="1"><br>
+            <% }) %>
+
+            <button type="submit">Crear Cotización</button>
+        </form>
+    </div>
+</body>
+</html>
+
+================================================================================
+# Archivo: views\dashboard.ejs
+================================================================================
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Dashboard de Gestión</title>
+    <!-- Bootstrap 4 CSS (CDN) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <!-- Font Awesome CSS (CDN) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- AdminLTE CSS (CDN) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+    <div class="wrapper">
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="#" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="#" class="nav-link">Contact</a>
+                </li>
+            </ul>
+            <form class="form-inline ml-3">
+                <div class="input-group input-group-sm">
+                    <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+                    <div class="input-group-append">
+                        <button class="btn btn-navbar" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Sidebar Container -->
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <a href="#" class="brand-link">
+                <img src="https://scontent.feoh11-1.fna.fbcdn.net/v/t39.30808-6/309450787_530191355773347_1930846317585276991_n.png?_nc_cat=104&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=kiO1SkiUUMUQ7kNvgE1n5OH&_nc_oc=AdgFskbLU1MMr5wcQMNE3A33Zm2ACGUpbkMueZeoPWLz0ypJ2ibHKDFYkf0V6WKbmbg&_nc_zt=23&_nc_ht=scontent.feoh11-1.fna&_nc_gid=AH6uGzdc_T-rBFC01la3m4B&oh=00_AYHeOeEdO2UnldW6Ns4Kdr7w07LY0xQwpM2XWFCMR5-KLg&oe=67D330BA" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+                <span class="brand-text font-weight-light">DPTECH</span>
+            </a>
+            <div class="sidebar">
+                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                    <div class="image">
+                        <img src="https://scontent.feoh11-1.fna.fbcdn.net/v/t39.30808-1/297280153_8223883027636941_3065647301383225366_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=104&ccb=1-7&_nc_sid=1d2534&_nc_ohc=6iPn8Xkgb9cQ7kNvgHzftkW&_nc_oc=AdhlXomTKCh9wYZadTDwO3z835b_itzZC1ZbJvD8DRdG5PzkK1A1NRwjEZLJrRpTxMk&_nc_zt=24&_nc_ht=scontent.feoh11-1.fna&_nc_gid=AqYHCgNws5JhkogH9TN_QVw&oh=00_AYGvg-3Sup8hLraAbPe38tDmnqdo4hFRpEmIWevxB82l-g&oe=67D3352D" class="img-circle elevation-2" alt="User Image">
+                    </div>
+                    <div class="info">
+                        <a href="#" class="d-block">stick</a>
+                    </div>
+                </div>
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-camera"></i>
+                                <p>Gestionar Cámaras</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-video"></i>
+                                <p>Gestionar Grabadores</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-tools"></i>
+                                <p>Gestionar Costos de Instalación</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-cogs"></i>
+                                <p>Gestionar Accesorios</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-plug"></i>
+                                <p>Gestionar Cables</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-shield-alt"></i>
+                                <p>Gestionar Protección de Cables</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-file-alt"></i>
+                                <p>Crear Cotización</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-list"></i>
+                                <p>Ver Lista de Cotizaciones</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" onclick="loadContent('/company_info')">
+                                <i class="nav-icon fas fa-building"></i>
+                                <p>Editar Información de la Empresa</p>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Content Wrapper -->
+        <div class="content-wrapper">
+            <!-- Content Header -->
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0">Dashboard</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item active">Dashboard v3</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <!-- Small Boxes -->
+                    <div class="row">
+                        <div class="col-lg-3 col-md-6 col-sm-12">
+                            <div class="small-box bg-info">
+                                <div class="inner">
+                                    <h3>$18,230.00</h3>
+                                    <p>Sales</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-bag"></i>
+                                </div>
+                                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-12">
+                            <div class="small-box bg-success">
+                                <div class="inner">
+                                    <h3>53<sup style="font-size: 20px">%</sup></h3>
+                                    <p>Bounce Rate</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-stats-bars"></i>
+                                </div>
+                                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-12">
+                            <div class="small-box bg-warning">
+                                <div class="inner">
+                                    <h3>44</h3>
+                                    <p>User Registrations</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-person-add"></i>
+                                </div>
+                                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-12">
+                            <div class="small-box bg-danger">
+                                <div class="inner">
+                                    <h3>65</h3>
+                                    <p>Unique Visitors</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-pie-graph"></i>
+                                </div>
+                                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <script>
+        // Función para cargar contenido en el iframe
+        function loadContent(url) {
+            const iframe = document.getElementById('content-frame');
+            iframe.src = url;
+            iframe.onload = function() {
+                // Ajusta la altura del iframe al tamaño del contenido
+                iframe.style.height = iframe.contentWindow.document.body.scrollHeight + 'px';
+            };
+        }
+    
+        // Configuración del botón para colapsar el menú (sin cambios)
+        const sidenav = document.querySelector('.sidenav');
+        const toggleBtn = document.createElement('button');
+        toggleBtn.textContent = '☰';
+        toggleBtn.style.position = 'absolute';
+        toggleBtn.style.top = '20px';
+        toggleBtn.style.left = '260px';
+        toggleBtn.style.background = '#00ddeb';
+        toggleBtn.style.border = 'none';
+        toggleBtn.style.padding = '5px 10px';
+        toggleBtn.style.cursor = 'pointer';
+        document.body.appendChild(toggleBtn);
+    
+        toggleBtn.addEventListener('click', () => {
+            sidenav.classList.toggle('collapsed');
+            if (sidenav.classList.contains('collapsed')) {
+                sidenav.style.width = '60px';
+                sidenav.querySelectorAll('a').forEach(a => a.style.display = 'none');
+            } else {
+                sidenav.style.width = '250px';
+                sidenav.querySelectorAll('a').forEach(a => a.style.display = 'block');
+            }
+        });
+    </script>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+</body>
+</html>
+
+================================================================================
+# Archivo: views\manage_accessories.ejs
+================================================================================
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Accesorios</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Gestionar Accesorios</h1>
+        <a href="/">Volver al Dashboard</a>
+        
+        <!-- Formulario para agregar nuevo accesorio -->
+        <h2>Agregar Accesorio</h2>
+        <form action="/manage_accessories" method="POST">
+            <input type="text" name="name" placeholder="Nombre" required><br>
+            <input type="text" name="price" placeholder="Precio (COP)" required><br>
+            <button type="submit">Agregar</button>
+        </form>
+
+        <!-- Lista de accesorios -->
+        <h2>Accesorios Existentes</h2>
+        <table>
+            <tr>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Acciones</th>
+            </tr>
+            <% accessories.forEach(accessory => { %>
+                <tr>
+                    <td><%= accessory.name %></td>
+                    <td class="numeric"><%= accessory.price %></td>
+                    <td>
+                        <form action="/manage_accessories/edit/<%= accessory.id %>" method="GET" style="display:inline;">
+                            <button type="submit">Editar</button>
+                        </form>
+                        <form action="/manage_accessories/delete/<%= accessory.id %>" method="POST" style="display:inline;">
+                            <button type="submit">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }) %>
+        </table>
+    </div>
+</body>
+</html>
+
+================================================================================
+# Archivo: views\manage_cables.ejs
+================================================================================
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Cables</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Gestionar Cables</h1>
+        <a href="/">Volver al Dashboard</a>
+        
+        <!-- Formulario para agregar nuevo cable -->
+        <h2>Agregar Cable</h2>
+        <form action="/manage_cables" method="POST">
+            <input type="text" name="type" placeholder="Tipo" required><br>
+            <input type="text" name="category" placeholder="Categoría" required><br>
+            <input type="text" name="price_per_meter" placeholder="Precio por Metro (COP)" required><br>
+            <button type="submit">Agregar</button>
+        </form>
+
+        <!-- Lista de cables -->
+        <h2>Cables Existentes</h2>
+        <table>
+            <tr>
+                <th>Tipo</th>
+                <th>Categoría</th>
+                <th>Precio por Metro</th>
+                <th>Acciones</th>
+            </tr>
+            <% cables.forEach(cable => { %>
+                <tr>
+                    <td><%= cable.type %></td>
+                    <td><%= cable.category %></td>
+                    <td class="numeric"><%= cable.price_per_meter %></td>
+                    <td>
+                        <form action="/manage_cables/edit/<%= cable.id %>" method="GET" style="display:inline;">
+                            <button type="submit">Editar</button>
+                        </form>
+                        <form action="/manage_cables/delete/<%= cable.id %>" method="POST" style="display:inline;">
+                            <button type="submit">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }) %>
+        </table>
+    </div>
+</body>
+</html>
+
+================================================================================
+# Archivo: views\manage_cameras.ejs
+================================================================================
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Cámaras</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Gestionar Cámaras</h1>
+        <a href="/">Volver al Dashboard</a>
+        
+        <!-- Formulario para agregar nueva cámara -->
+        <h2>Agregar Cámara</h2>
+        <form action="/manage_cameras" method="POST">
+            <input type="text" name="model" placeholder="Modelo" required><br>
+            <input type="number" name="mp" placeholder="MP" required><br>
+            <input type="text" name="usage" placeholder="Uso (Interior/Exterior)" required><br>
+            <input type="text" name="material" placeholder="Material" required><br>
+            <input type="text" name="type" placeholder="Tipo (Bala/Domo)" required><br>
+            <input type="text" name="ir_color" placeholder="IR/Color" required><br>
+            <input type="text" name="audio" placeholder="Audio (Sí/No)" required><br>
+            <input type="number" name="ir_range" placeholder="Alcance IR (m)" required><br>
+            <input type="text" name="connection" placeholder="Conexión (IP/BNC)" required><br>
+            <input type="text" name="ai" placeholder="IA (Sí/No o descripción)" required><br>
+            <input type="text" name="price" placeholder="Precio Aprox. (COP)" required><br>
+            <button type="submit">Agregar</button>
+        </form>
+
+        <!-- Lista de cámaras -->
+        <h2>Cámaras Existentes</h2>
+        <table>
+            <tr>
+                <th>Modelo</th>
+                <th>MP</th>
+                <th>Uso</th>
+                <th>Material</th>
+                <th>Tipo</th>
+                <th>IR/Color</th>
+                <th>Audio</th>
+                <th>Alcance IR</th>
+                <th>Conexión</th>
+                <th>IA</th>
+                <th>Precio</th>
+                <th>Acciones</th>
+            </tr>
+            <% cameras.forEach(camera => { %>
+                <tr>
+                    <td><%= camera.model %></td>
+                    <td class="numeric"><%= camera.mp %></td>
+                    <td><%= camera.usage %></td>
+                    <td><%= camera.material %></td>
+                    <td><%= camera.type %></td>
+                    <td><%= camera.ir_color %></td>
+                    <td><%= camera.audio %></td>
+                    <td class="numeric"><%= camera.ir_range %></td>
+                    <td><%= camera.connection %></td>
+                    <td><%= camera.ai %></td>
+                    <td class="numeric"><%= camera.price %></td>
+                    <td>
+                        <form action="/manage_cameras/edit/<%= camera.id %>" method="GET" style="display:inline;">
+                            <button type="submit">Editar</button>
+                        </form>
+                        <form action="/manage_cameras/delete/<%= camera.id %>" method="POST" style="display:inline;">
+                            <button type="submit">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }) %>
+        </table>
+    </div>
+</body>
+</html>
+
+================================================================================
+# Archivo: views\manage_installation.ejs
+================================================================================
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Costos de Instalación</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Gestionar Costos de Instalación</h1>
+        <a href="/">Volver al Dashboard</a>
+        
+        <!-- Formulario para agregar nuevo costo -->
+        <h2>Agregar Costo de Instalación</h2>
+        <form action="/manage_installation" method="POST">
+            <input type="text" name="condition" placeholder="Condición" required><br>
+            <input type="text" name="price" placeholder="Precio (COP)" required><br>
+            <button type="submit">Agregar</button>
+        </form>
+
+        <!-- Lista de costos -->
+        <h2>Costos Existentes</h2>
+        <table>
+            <tr>
+                <th>Condición</th>
+                <th>Precio</th>
+                <th>Acciones</th>
+            </tr>
+            <% installation_costs.forEach(cost => { %>
+                <tr>
+                    <td><%= cost.condition %></td>
+                    <td class="numeric"><%= cost.price %></td>
+                    <td>
+                        <form action="/manage_installation/edit/<%= cost.id %>" method="GET" style="display:inline;">
+                            <button type="submit">Editar</button>
+                        </form>
+                        <form action="/manage_installation/delete/<%= cost.id %>" method="POST" style="display:inline;">
+                            <button type="submit">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }) %>
+        </table>
+    </div>
+</body>
+</html>
+
+================================================================================
+# Archivo: views\manage_products.ejs
+================================================================================
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestionar Productos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4">Gestionar Productos</h1>
+        <form action="/products" method="POST" class="mb-4">
+            <div class="row g-3">
+                <div class="col">
+                    <input type="text" class="form-control" name="modelo" placeholder="Nombre" required>
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" name="mp" placeholder="MP" required>
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" name="uso" placeholder="uso" required>
+                </div>
+                <div class="col">
+                    <div class="col">
+                        <input type="text" class="form-control" name="material" placeholder="material" required>
+                    </div>
+                    <div class="col">
+                        <div class="col">
+                            <input type="text" class="form-control" name="tipo" placeholder="tipo" required>
+                        </div>
+                        <div class="col">
+                            <div class="col">
+                                <input type="text" class="form-control" name="vision" placeholder="Vision" required>
+                            </div>
+                            <div class="col">
+                                <div class="col">
+                                    <input type="text" class="form-control" name="audio" placeholder="Audio" required>
+                                </div>
+                    <input type="text" class="form-control" name="price" placeholder="Precio" required>
+                </div>
+                <div class="col">
+                    <button type="submit" class="btn btn-primary">Agregar</button>
+                </div>
+            </div>
+        </form>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Categoría</th>
+                    <th>Precio</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% products.forEach(product => { %>
+                    <tr>
+                        <td><%= product.id %></td>
+                        <td><%= product.name %></td>
+                        <td><%= product.category %></td>
+                        <td><%= product.price %></td>
+                        <td>
+                            <form action="/products/delete/<%= product.id %>" method="POST" style="display:inline;">
+                                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+        <a href="/create_quote" class="btn btn-success">Crear Cotización</a>
+    </div>
+</body>
+</html>
+
+================================================================================
+# Archivo: views\manage_protection.ejs
+================================================================================
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Protección de Cables</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Gestionar Protección de Cables</h1>
+        <a href="/">Volver al Dashboard</a>
+        
+        <!-- Formulario para agregar nueva protección -->
+        <h2>Agregar Protección</h2>
+        <form action="/manage_protection" method="POST">
+            <input type="text" name="type" placeholder="Tipo" required><br>
+            <input type="text" name="capacity" placeholder="Capacidad" required><br>
+            <input type="text" name="price_per_2m" placeholder="Precio por 2m (COP)" required><br>
+            <button type="submit">Agregar</button>
+        </form>
+
+        <!-- Lista de protecciones -->
+        <h2>Protecciones Existentes</h2>
+        <table>
+            <tr>
+                <th>Tipo</th>
+                <th>Capacidad</th>
+                <th>Precio por 2m</th>
+                <th>Acciones</th>
+            </tr>
+            <% cable_protection.forEach(protection => { %>
+                <tr>
+                    <td><%= protection.type %></td>
+                    <td><%= protection.capacity %></td>
+                    <td class="numeric"><%= protection.price_per_2m %></td>
+                    <td>
+                        <form action="/manage_protection/edit/<%= protection.id %>" method="GET" style="display:inline;">
+                            <button type="submit">Editar</button>
+                        </form>
+                        <form action="/manage_protection/delete/<%= protection.id %>" method="POST" style="display:inline;">
+                            <button type="submit">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }) %>
+        </table>
+    </div>
+</body>
+</html>
+
+================================================================================
+# Archivo: views\manage_recorders.ejs
+================================================================================
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Grabadores</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Gestionar Grabadores</h1>
+        <a href="/">Volver al Dashboard</a>
+        
+        <!-- Formulario para agregar nuevo grabador -->
+        <h2>Agregar Grabador</h2>
+        <form action="/manage_recorders" method="POST">
+            <input type="text" name="model" placeholder="Modelo" required><br>
+            <input type="number" name="channels" placeholder="Canales" required><br>
+            <input type="text" name="resolution" placeholder="Resolución" required><br>
+            <input type="text" name="technology" placeholder="Tecnología" required><br>
+            <input type="text" name="price" placeholder="Precio Aprox. (COP)" required><br>
+            <button type="submit">Agregar</button>
+        </form>
+
+        <!-- Lista de grabadores -->
+        <h2>Grabadores Existentes</h2>
+        <table>
+            <tr>
+                <th>Modelo</th>
+                <th>Canales</th>
+                <th>Resolución</th>
+                <th>Tecnología</th>
+                <th>Precio</th>
+                <th>Acciones</th>
+            </tr>
+            <% recorders.forEach(recorder => { %>
+                <tr>
+                    <td><%= recorder.model %></td>
+                    <td class="numeric"><%= recorder.channels %></td>
+                    <td><%= recorder.resolution %></td>
+                    <td><%= recorder.technology %></td>
+                    <td class="numeric"><%= recorder.price %></td>
+                    <td>
+                        <form action="/manage_recorders/edit/<%= recorder.id %>" method="GET" style="display:inline;">
+                            <button type="submit">Editar</button>
+                        </form>
+                        <form action="/manage_recorders/delete/<%= recorder.id %>" method="POST" style="display:inline;">
+                            <button type="submit">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }) %>
+        </table>
+    </div>
+</body>
+</html>
+
+================================================================================
+# Archivo: views\prueba.ejs
+================================================================================
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Gestión</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body class="vision-ui">
+    <div class="dashboard-wrapper">
+        <!-- Sidebar -->
+        <div class="sidenav">
+            <div class="sidenav-header">
+                <h2>Gestión</h2>
+            </div>
+            <ul class="sidenav-menu">
+                <li><a href="#" onclick="loadContent('/manage_cameras')">Gestionar Cámaras</a></li>
+                <li><a href="#" onclick="loadContent('/manage_recorders')">Gestionar Grabadores</a></li>
+                <li><a href="#" onclick="loadContent('/manage_installation')">Gestionar Costos de Instalación</a></li>
+                <li><a href="#" onclick="loadContent('/manage_accessories')">Gestionar Accesorios</a></li>
+                <li><a href="#" onclick="loadContent('/manage_cables')">Gestionar Cables</a></li>
+                <li><a href="#" onclick="loadContent('/manage_protection')">Gestionar Protección de Cables</a></li>
+                <li><a href="#" onclick="loadContent('/create_quote')">Crear Cotización</a></li>
+                <li><a href="#" onclick="loadContent('/quotes')">Ver Lista de Cotizaciones</a></li>
+                <li><a href="#" onclick="loadContent('/company_info')">Editar Información de la Empresa</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="navbar">
+                <h1>Dashboard de Gestión</h1>
+            </div>
+            <div class="content">
+                <iframe id="content-frame" style="width:100%; height:100%; border:none;"></iframe>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Función para cargar contenido en el iframe
+        function loadContent(url) {
+            const iframe = document.getElementById('content-frame');
+            iframe.src = url;
+            iframe.onload = function() {
+                // Ajusta la altura del iframe al tamaño del contenido
+                iframe.style.height = iframe.contentWindow.document.body.scrollHeight + 'px';
+            };
+        }
+    
+        // Configuración del botón para colapsar el menú (sin cambios)
+        const sidenav = document.querySelector('.sidenav');
+        const toggleBtn = document.createElement('button');
+        toggleBtn.textContent = '☰';
+        toggleBtn.style.position = 'absolute';
+        toggleBtn.style.top = '20px';
+        toggleBtn.style.left = '260px';
+        toggleBtn.style.background = '#00ddeb';
+        toggleBtn.style.border = 'none';
+        toggleBtn.style.padding = '5px 10px';
+        toggleBtn.style.cursor = 'pointer';
+        document.body.appendChild(toggleBtn);
+    
+        toggleBtn.addEventListener('click', () => {
+            sidenav.classList.toggle('collapsed');
+            if (sidenav.classList.contains('collapsed')) {
+                sidenav.style.width = '60px';
+                sidenav.querySelectorAll('a').forEach(a => a.style.display = 'none');
+            } else {
+                sidenav.style.width = '250px';
+                sidenav.querySelectorAll('a').forEach(a => a.style.display = 'block');
+            }
+        });
+    </script>
+</body>
+</html>
+
+================================================================================
+# Archivo: views\quotes_list.ejs
+================================================================================
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Cotizaciones</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>LISTA DE COTIZACIONES</h1>
+        
+        <table>
+            <tr>
+                <th>Número de Cotización</th>
+                <th>Nombre del Cliente</th>
+                <th>Fecha de Creación</th>
+                <th>Acción</th>
+            </tr>
+            <% if (quotes.length > 0) { %>
+                <% quotes.forEach(quote => { %>
+                    <tr>
+                        <td class="numeric"><%= quote.id %></td>
+                        <td><%= quote.name %></td>
+                        <td><%= quote.date %></td>
+                        <td><a href="/quote/<%= quote.id %>"target="_blank">Ver Detalle</a></td>
+                    </tr>
+                <% }) %>
+            <% } else { %>
+                <tr>
+                    <td colspan="4" style="text-align: center;">No hay cotizaciones registradas.</td>
+                </tr>
+            <% } %>
+        </table>
+
+        <p><a href="/">Volver al Dashboard</a></p>
+    </div>
+</body>
+</html>
+
+================================================================================
+# Archivo: views\view_quote.ejs
+================================================================================
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotización de Sistema de Seguridad</title>
+    <link rel="stylesheet" href="/cotizaciones_style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-left">
+                <img src="/logo.png" alt="Logo Empresa" style="display:none;">
+            </div>
+            <div class="header-right">
+                <%= company.city %>, <%= company.date %><br>
+                <%= company.name %><br>
+                Tel: <%= company.phone %><br>
+                Correo: <%= company.email %><br>
+                <%= company.website %>
+            </div>
+        </div>
+
+        <h1>COTIZACIÓN DE SISTEMA DE SEGURIDAD</h1>
+        <p>Señores: <%= quote.name %></p>
+
+        <% if (items.some(item => item.item_type === 'recorder')) { %>
+            <h2>DISPOSITIVOS DE GRABACIÓN</h2>
+            <table>
+                <tr>
+                    <th>Modelo</th>
+                    <th>Cantidad</th>
+                    <th>Precio Aprox. (COP)</th>
+                    <th>Total (COP)</th>
+                </tr>
+                <% items.filter(item => item.item_type === 'recorder').forEach(item => { %>
+                    <tr>
+                        <td><%= item.recorder_model %></td>
+                        <td class="numeric"><%= item.quantity %></td>
+                        <td class="numeric"><%= item.recorder_price %></td>
+                        <td class="numeric"><%= (parseInt(item.recorder_price.replace(/\./g, '')) * item.quantity).toLocaleString('es-CO') %></td>
+                    </tr>
+                <% }) %>
+            </table>
+        <% } %>
+
+        <% if (items.some(item => item.item_type === 'camera')) { %>
+            <h2>DISPOSITIVOS DE CÁMARAS</h2>
+            <table>
+                <tr>
+                    <th>Modelo</th>
+                    <th>Cantidad</th>
+                    <th>Precio Aprox. (COP)</th>
+                    <th>Total (COP)</th>
+                </tr>
+                <% items.filter(item => item.item_type === 'camera').forEach(item => { %>
+                    <tr>
+                        <td><%= item.camera_model %></td>
+                        <td class="numeric"><%= item.quantity %></td>
+                        <td class="numeric"><%= item.camera_price %></td>
+                        <td class="numeric"><%= (parseInt(item.camera_price.replace(/\./g, '')) * item.quantity).toLocaleString('es-CO') %></td>
+                    </tr>
+                <% }) %>
+            </table>
+        <% } %>
+
+        <% if (items.some(item => item.item_type === 'installation')) { %>
+            <h2>COSTO DE INSTALACIÓN (POR CÁMARA)</h2>
+            <table>
+                <tr>
+                    <th>Condición</th>
+                    <th>Cantidad</th>
+                    <th>Precio (COP)</th>
+                    <th>Total (COP)</th>
+                </tr>
+                <% items.filter(item => item.item_type === 'installation').forEach(item => { %>
+                    <tr>
+                        <td><%= item.installation_condition %></td>
+                        <td class="numeric"><%= item.quantity %></td>
+                        <td class="numeric"><%= item.installation_price %></td>
+                        <td class="numeric"><%= (parseInt(item.installation_price.replace(/\./g, '')) * item.quantity).toLocaleString('es-CO') %></td>
+                    </tr>
+                <% }) %>
+            </table>
+        <% } %>
+
+        <% if (items.some(item => item.item_type === 'accessory')) { %>
+            <h2>ACCESORIOS POR CÁMARA</h2>
+            <table>
+                <tr>
+                    <th>Accesorio</th>
+                    <th>Cantidad</th>
+                    <th>Precio (COP)</th>
+                    <th>Total (COP)</th>
+                </tr>
+                <% items.filter(item => item.item_type === 'accessory').forEach(item => { %>
+                    <tr>
+                        <td><%= item.accessory_name %></td>
+                        <td class="numeric"><%= item.quantity %></td>
+                        <td class="numeric"><%= item.accessory_price %></td>
+                        <td class="numeric"><%= (parseInt(item.accessory_price.replace(/\./g, '')) * item.quantity).toLocaleString('es-CO') %></td>
+                    </tr>
+                <% }) %>
+            </table>
+        <% } %>
+
+        <% if (items.some(item => item.item_type === 'cable')) { %>
+            <h2>COSTO DE CABLE POR METRO</h2>
+            <table>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Metros</th>
+                    <th>Precio por Metro (COP)</th>
+                    <th>Total (COP)</th>
+                </tr>
+                <% items.filter(item => item.item_type === 'cable').forEach(item => { %>
+                    <tr>
+                        <td><%= item.cable_type %></td>
+                        <td class="numeric"><%= item.quantity %></td>
+                        <td class="numeric"><%= item.cable_price %></td>
+                        <td class="numeric"><%= (parseInt(item.cable_price.replace(/\./g, '')) * item.quantity).toLocaleString('es-CO') %></td>
+                    </tr>
+                <% }) %>
+            </table>
+        <% } %>
+
+        <% if (items.some(item => item.item_type === 'protection')) { %>
+            <h2>COSTO DE PROTECCIÓN PARA CABLES (POR 2 METROS, OPCIONAL)</h2>
+            <table>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Cantidad (2m)</th>
+                    <th>Precio por 2m (COP)</th>
+                    <th>Total (COP)</th>
+                </tr>
+                <% items.filter(item => item.item_type === 'protection').forEach(item => { %>
+                    <tr>
+                        <td><%= item.protection_type %></td>
+                        <td class="numeric"><%= item.quantity %></td>
+                        <td class="numeric"><%= item.protection_price %></td>
+                        <td class="numeric"><%= (parseInt(item.protection_price.replace(/\./g, '')) * item.quantity).toLocaleString('es-CO') %></td>
+                    </tr>
+                <% }) %>
+            </table>
+        <% } %>
+
+        <div class="footer">
+            [Firma]       <%= company.phone %>       <%= company.email %>
+        </div>
+    </div>
+</body>
+</html>
+
+================================================================================
+# Archivo: package.json
+================================================================================
+
+{
+  "name": "proyecto-cotizaciones",
+  "version": "1.0.0",
+  "description": "Sistema de cotizaciones para seguridad",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.7.2",
+    "admin-lte": "^4.0.0-beta3",
+    "bootstrap": "^4.6.2",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "jquery": "^3.7.1",
+    "sqlite3": "^5.1.7"
+  }
+}
+
+
+================================================================================
+# Fin del proyecto
