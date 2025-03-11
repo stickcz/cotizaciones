@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Cotizaciones</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <!-- Font Awesome CSS (CDN) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- AdminLTE CSS (CDN) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>LISTA DE COTIZACIONES</h1>
+        
+        <table class="table table-bordered">
+            <tr>
+                <th>Número de Cotización</th>
+                <th>Nombre del Cliente</th>
+                <th>Fecha de Creación</th>
+                <th>Acción</th>
+            </tr>
+            <% if (quotes.length > 0) { %>
+                <% quotes.forEach(quote => { %>
+                    <tr>
+                        <td class="numeric"><%= quote.id %></td>
+                        <td><%= quote.name %></td>
+                        <td><%= quote.date %></td>
+                        <td><a href="/quote/<%= quote.id %>"target="_blank">Ver Detalle</a></td>
+                    </tr>
+                <% }) %>
+            <% } else { %>
+                <tr>
+                    <td colspan="4" style="text-align: center;">No hay cotizaciones registradas.</td>
+                </tr>
+            <% } %>
+        </table>
+        <div class="btn btn-primary btn-lg btn-flat" aria-selected="false" href="/">Volver al Dashboard</a></h4>
+        </div>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Cámaras</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Gestionar Cámaras</h1>
+        <a href="/">Volver al Dashboard</a>
+        
+        <!-- Formulario para agregar nueva cámara -->
+        <h2>Agregar Cámara</h2>
+        <form action="/manage_cameras" method="POST">
+            <input type="text" name="model" placeholder="Modelo" required><br>
+            <input type="number" name="mp" placeholder="MP" required><br>
+            <input type="text" name="usage" placeholder="Uso (Interior/Exterior)" required><br>
+            <input type="text" name="material" placeholder="Material" required><br>
+            <input type="text" name="type" placeholder="Tipo (Bala/Domo)" required><br>
+            <input type="text" name="ir_color" placeholder="IR/Color" required><br>
+            <input type="text" name="audio" placeholder="Audio (Sí/No)" required><br>
+            <input type="number" name="ir_range" placeholder="Alcance IR (m)" required><br>
+            <input type="text" name="connection" placeholder="Conexión (IP/BNC)" required><br>
+            <input type="text" name="ai" placeholder="IA (Sí/No o descripción)" required><br>
+            <input type="text" name="price" placeholder="Precio Aprox. (COP)" required><br>
+            <button type="submit">Agregar</button>
+        </form>
+
+        <!-- Lista de cámaras -->
+        <h2>Cámaras Existentes</h2>
+        <table>
+            <tr>
+                <th>Modelo</th>
+                <th>MP</th>
+                <th>Uso</th>
+                <th>Material</th>
+                <th>Tipo</th>
+                <th>IR/Color</th>
+                <th>Audio</th>
+                <th>Alcance IR</th>
+                <th>Conexión</th>
+                <th>IA</th>
+                <th>Precio</th>
+                <th>Acciones</th>
+            </tr>
+            <% cameras.forEach(camera => { %>
+                <tr>
+                    <td><%= camera.model %></td>
+                    <td class="numeric"><%= camera.mp %></td>
+                    <td><%= camera.usage %></td>
+                    <td><%= camera.material %></td>
+                    <td><%= camera.type %></td>
+                    <td><%= camera.ir_color %></td>
+                    <td><%= camera.audio %></td>
+                    <td class="numeric"><%= camera.ir_range %></td>
+                    <td><%= camera.connection %></td>
+                    <td><%= camera.ai %></td>
+                    <td class="numeric"><%= camera.price %></td>
+                    <td>
+                        <form action="/manage_cameras/edit/<%= camera.id %>" method="GET" style="display:inline;">
+                            <button type="submit">Editar</button>
+                        </form>
+                        <form action="/manage_cameras/delete/<%= camera.id %>" method="POST" style="display:inline;">
+                            <button type="submit">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }) %>
+        </table>
+    </div>
+</body>
+</html>

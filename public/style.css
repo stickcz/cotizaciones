@@ -1,0 +1,205 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilos originales para vistas clásicas (cotizaciones, etc.) */
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    color: #4A4A4A; /* Gris oscuro por defecto */
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 2px solid #4A4A4A;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.header-left img {
+    max-width: 100px; /* Ajusta según tu logo */
+}
+
+.header-right {
+    text-align: right;
+    font-size: 12px;
+}
+
+h1 {
+    text-align: center;
+    color: #870000; /* Azul oscuro */
+    font-size: 24px;
+    font-weight: bold;
+    margin: 20px 0;
+}
+
+h2 {
+    color: #870000;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 15px 0 10px;
+}
+
+h3 {
+    color: #870012;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+th, td {
+    border: 1px solid #4A4A4A;
+    padding: 8px;
+    font-size: 12px;
+}
+
+th {
+    background-color: #D3D3D3; /* Gris claro */
+    font-weight: bold;
+    text-align: center;
+}
+
+td {
+    text-align: left;
+}
+
+td.numeric {
+    text-align: center;
+}
+
+.note {
+    border: 1px solid #4A4A4A;
+    padding: 10px;
+    font-size: 11px;
+    margin: 20px 0;
+}
+
+.footer {
+    border-top: 2px solid #4A4A4A;
+    text-align: center;
+    font-size: 10px;
+    padding-top: 10px;
+    margin-top: 20px;
+}
+
+/* Estilos para el Dashboard inspirado en Vision UI */
+body.vision-ui {
+    background: linear-gradient(135deg, #1a1a2e 0%, #3e1616 100%);
+    color: #ffffff;
+    margin: 0; /* Sobreescribe el margen para el dashboard */
+    min-height: 100vh;
+}
+
+.dashboard-wrapper {
+    display: flex;
+    height: 100vh;
+}
+
+.sidenav {
+    width: 250px;
+    background: rgba(35, 23, 23, 0.95);
+    padding: 20px;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+.sidenav-header {
+    margin-bottom: 30px;
+}
+
+.sidenav-header h2 {
+    font-size: 24px;
+    color: #eb0000; /* Azul cian */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.sidenav-menu {
+    list-style: none;
+}
+
+.sidenav-menu li {
+    margin: 15px 0;
+}
+
+.sidenav-menu a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 10px 15px;
+    display: block;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.sidenav-menu a:hover {
+    background: linear-gradient(90deg, #dd1864, #ff0000);
+    color: #ffffff;
+    transform: translateX(5px);
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.navbar {
+    background: rgba(23, 25, 35, 0.95);
+    padding: 15px 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.navbar h1 {
+    font-size: 28px;
+    color: #ffffff; /* Blanco para el dashboard */
+    text-align: center;
+}
+
+.content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.card {
+    background: rgba(34, 36, 48, 0.9);
+    padding: 20px;
+    border-radius: 12px;
+    width: 300px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(5px);
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card h3 {
+    font-size: 20px;
+    color: #00ddeb; /* Azul cian */
+    margin-bottom: 10px;
+}
+
+.card p {
+    font-size: 14px;
+    color: #d1d5db; /* Gris claro */
+}

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Grabadores</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Gestionar Grabadores</h1>
+        <a href="/">Volver al Dashboard</a>
+        
+        <!-- Formulario para agregar nuevo grabador -->
+        <h2>Agregar Grabador</h2>
+        <form action="/manage_recorders" method="POST">
+            <input type="text" name="model" placeholder="Modelo" required><br>
+            <input type="number" name="channels" placeholder="Canales" required><br>
+            <input type="text" name="resolution" placeholder="Resolución" required><br>
+            <input type="text" name="technology" placeholder="Tecnología" required><br>
+            <input type="text" name="price" placeholder="Precio Aprox. (COP)" required><br>
+            <button type="submit">Agregar</button>
+        </form>
+
+        <!-- Lista de grabadores -->
+        <h2>Grabadores Existentes</h2>
+        <table>
+            <tr>
+                <th>Modelo</th>
+                <th>Canales</th>
+                <th>Resolución</th>
+                <th>Tecnología</th>
+                <th>Precio</th>
+                <th>Acciones</th>
+            </tr>
+            <% recorders.forEach(recorder => { %>
+                <tr>
+                    <td><%= recorder.model %></td>
+                    <td class="numeric"><%= recorder.channels %></td>
+                    <td><%= recorder.resolution %></td>
+                    <td><%= recorder.technology %></td>
+                    <td class="numeric"><%= recorder.price %></td>
+                    <td>
+                        <form action="/manage_recorders/edit/<%= recorder.id %>" method="GET" style="display:inline;">
+                            <button type="submit">Editar</button>
+                        </form>
+                        <form action="/manage_recorders/delete/<%= recorder.id %>" method="POST" style="display:inline;">
+                            <button type="submit">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }) %>
+        </table>
+    </div>
+</body>
+</html>

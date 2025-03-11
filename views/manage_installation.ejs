@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Costos de Instalación</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Gestionar Costos de Instalación</h1>
+        <a href="/">Volver al Dashboard</a>
+        
+        <!-- Formulario para agregar nuevo costo -->
+        <h2>Agregar Costo de Instalación</h2>
+        <form action="/manage_installation" method="POST">
+            <input type="text" name="condition" placeholder="Condición" required><br>
+            <input type="text" name="price" placeholder="Precio (COP)" required><br>
+            <button type="submit">Agregar</button>
+        </form>
+
+        <!-- Lista de costos -->
+        <h2>Costos Existentes</h2>
+        <table>
+            <tr>
+                <th>Condición</th>
+                <th>Precio</th>
+                <th>Acciones</th>
+            </tr>
+            <% installation_costs.forEach(cost => { %>
+                <tr>
+                    <td><%= cost.condition %></td>
+                    <td class="numeric"><%= cost.price %></td>
+                    <td>
+                        <form action="/manage_installation/edit/<%= cost.id %>" method="GET" style="display:inline;">
+                            <button type="submit">Editar</button>
+                        </form>
+                        <form action="/manage_installation/delete/<%= cost.id %>" method="POST" style="display:inline;">
+                            <button type="submit">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }) %>
+        </table>
+    </div>
+</body>
+</html>

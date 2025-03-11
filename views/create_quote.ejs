@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Cotización</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Crear Cotización</h1>
+        <form action="/create_quote" method="POST">
+            <h2>Cliente</h2>
+            <label>Seleccionar Cliente Existente:</label>
+            <select name="customer_id">
+                <option value="">Nuevo Cliente</option>
+                <% customers.forEach(customer => { %>
+                    <option value="<%= customer.id %>"><%= customer.name %> (<%= customer.phone %>)</option>
+                <% }) %>
+            </select><br>
+            <label>O crear nuevo cliente:</label><br>
+            <input type="text" name="new_customer_name" placeholder="Nombre" required><br>
+            <input type="text" name="new_customer_id_number" placeholder="Identificación (opcional)"><br>
+            <input type="text" name="new_customer_phone" placeholder="Teléfono" required><br>
+            <input type="text" name="new_customer_address" placeholder="Dirección (opcional)"><br>
+            <input type="email" name="new_customer_email" placeholder="Email (opcional)"><br>
+
+            <h2>Cámaras</h2>
+            <% cameras.forEach(camera => { %>
+                <input type="checkbox" name="cameras" value="<%= camera.id %>"> <%= camera.model %> - <%= camera.price %><br>
+                <input type="number" name="quantities[cameras][]" placeholder="Cantidad" min="1"><br>
+            <% }) %>
+
+            <h2>Grabadores</h2>
+            <% recorders.forEach(recorder => { %>
+                <input type="checkbox" name="recorders" value="<%= recorder.id %>"> <%= recorder.model %> - <%= recorder.price %><br>
+                <input type="number" name="quantities[recorders][]" placeholder="Cantidad" min="1"><br>
+            <% }) %>
+
+            <h2>Instalación</h2>
+            <% installation_costs.forEach(cost => { %>
+                <input type="checkbox" name="installation_costs" value="<%= cost.id %>"> <%= cost.condition %> - <%= cost.price %><br>
+                <input type="number" name="quantities[installation_costs][]" placeholder="Cantidad" min="1"><br>
+            <% }) %>
+
+            <h2>Accesorios</h2>
+            <% accessories.forEach(accessory => { %>
+                <input type="checkbox" name="accessories" value="<%= accessory.id %>"> <%= accessory.name %> - <%= accessory.price %><br>
+                <input type="number" name="quantities[accessories][]" placeholder="Cantidad" min="1"><br>
+            <% }) %>
+
+            <h2>Cables</h2>
+            <% cables.forEach(cable => { %>
+                <input type="checkbox" name="cables" value="<%= cable.id %>"> <%= cable.type %> - <%= cable.price_per_meter %>/m<br>
+                <input type="number" name="quantities[cables][]" placeholder="Metros" min="1"><br>
+            <% }) %>
+
+            <h2>Protección de Cables</h2>
+            <% protection.forEach(prot => { %>
+                <input type="checkbox" name="cable_protection" value="<%= prot.id %>"> <%= prot.type %> - <%= prot.price_per_2m %>/2m<br>
+                <input type="number" name="quantities[cable_protection][]" placeholder="Cantidad (2m)" min="1"><br>
+            <% }) %>
+
+            <button type="submit">Crear Cotización</button>
+        </form>
+    </div>
+</body>
+</html>

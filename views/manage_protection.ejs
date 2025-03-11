@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Protección de Cables</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Gestionar Protección de Cables</h1>
+        <a href="/">Volver al Dashboard</a>
+        
+        <!-- Formulario para agregar nueva protección -->
+        <h2>Agregar Protección</h2>
+        <form action="/manage_protection" method="POST">
+            <input type="text" name="type" placeholder="Tipo" required><br>
+            <input type="text" name="capacity" placeholder="Capacidad" required><br>
+            <input type="text" name="price_per_2m" placeholder="Precio por 2m (COP)" required><br>
+            <button type="submit">Agregar</button>
+        </form>
+
+        <!-- Lista de protecciones -->
+        <h2>Protecciones Existentes</h2>
+        <table>
+            <tr>
+                <th>Tipo</th>
+                <th>Capacidad</th>
+                <th>Precio por 2m</th>
+                <th>Acciones</th>
+            </tr>
+            <% cable_protection.forEach(protection => { %>
+                <tr>
+                    <td><%= protection.type %></td>
+                    <td><%= protection.capacity %></td>
+                    <td class="numeric"><%= protection.price_per_2m %></td>
+                    <td>
+                        <form action="/manage_protection/edit/<%= protection.id %>" method="GET" style="display:inline;">
+                            <button type="submit">Editar</button>
+                        </form>
+                        <form action="/manage_protection/delete/<%= protection.id %>" method="POST" style="display:inline;">
+                            <button type="submit">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }) %>
+        </table>
+    </div>
+</body>
+</html>

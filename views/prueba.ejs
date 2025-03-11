@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Gestión</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body class="vision-ui">
+    <div class="dashboard-wrapper">
+        <!-- Sidebar -->
+        <div class="sidenav">
+            <div class="sidenav-header">
+                <h2>Gestión</h2>
+            </div>
+            <ul class="sidenav-menu">
+                <li><a href="#" onclick="loadContent('/manage_cameras')">Gestionar Cámaras</a></li>
+                <li><a href="#" onclick="loadContent('/manage_recorders')">Gestionar Grabadores</a></li>
+                <li><a href="#" onclick="loadContent('/manage_installation')">Gestionar Costos de Instalación</a></li>
+                <li><a href="#" onclick="loadContent('/manage_accessories')">Gestionar Accesorios</a></li>
+                <li><a href="#" onclick="loadContent('/manage_cables')">Gestionar Cables</a></li>
+                <li><a href="#" onclick="loadContent('/manage_protection')">Gestionar Protección de Cables</a></li>
+                <li><a href="#" onclick="loadContent('/create_quote')">Crear Cotización</a></li>
+                <li><a href="#" onclick="loadContent('/quotes')">Ver Lista de Cotizaciones</a></li>
+                <li><a href="#" onclick="loadContent('/company_info')">Editar Información de la Empresa</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="navbar">
+                <h1>Dashboard de Gestión</h1>
+            </div>
+            <div class="content">
+                <iframe id="content-frame" style="width:100%; height:100%; border:none;"></iframe>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Función para cargar contenido en el iframe
+        function loadContent(url) {
+            const iframe = document.getElementById('content-frame');
+            iframe.src = url;
+            iframe.onload = function() {
+                // Ajusta la altura del iframe al tamaño del contenido
+                iframe.style.height = iframe.contentWindow.document.body.scrollHeight + 'px';
+            };
+        }
+    
+        // Configuración del botón para colapsar el menú (sin cambios)
+        const sidenav = document.querySelector('.sidenav');
+        const toggleBtn = document.createElement('button');
+        toggleBtn.textContent = '☰';
+        toggleBtn.style.position = 'absolute';
+        toggleBtn.style.top = '20px';
+        toggleBtn.style.left = '260px';
+        toggleBtn.style.background = '#00ddeb';
+        toggleBtn.style.border = 'none';
+        toggleBtn.style.padding = '5px 10px';
+        toggleBtn.style.cursor = 'pointer';
+        document.body.appendChild(toggleBtn);
+    
+        toggleBtn.addEventListener('click', () => {
+            sidenav.classList.toggle('collapsed');
+            if (sidenav.classList.contains('collapsed')) {
+                sidenav.style.width = '60px';
+                sidenav.querySelectorAll('a').forEach(a => a.style.display = 'none');
+            } else {
+                sidenav.style.width = '250px';
+                sidenav.querySelectorAll('a').forEach(a => a.style.display = 'block');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    color: #4A4A4A; /* Gris oscuro */
+}
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 2px solid #4A4A4A;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+.header-left img {
+    max-width: 100px; /* Ajusta según tu logo */
+}
+.header-right {
+    text-align: right;
+    font-size: 12px;
+}
+h1 {
+    text-align: center;
+    color: #003087; /* Azul oscuro */
+    font-size: 24px;
+    font-weight: bold;
+    margin: 20px 0;
+}
+h2 {
+    color: #003087;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 15px 0 10px;
+}
+h3 {
+    color: #003087;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+th, td {
+    border: 1px solid #4A4A4A;
+    padding: 8px;
+    font-size: 12px;
+}
+th {
+    background-color: #D3D3D3; /* Gris claro */
+    font-weight: bold;
+    text-align: center;
+}
+td {
+    text-align: left;
+}
+td.numeric {
+    text-align: center;
+}
+.note {
+    border: 1px solid #4A4A4A;
+    padding: 10px;
+    font-size: 11px;
+    margin: 20px 0;
+}
+.footer {
+    border-top: 2px solid #4A4A4A;
+    text-align: center;
+    font-size: 10px;
+    padding-top: 10px;
+    margin-top: 20px;
+}

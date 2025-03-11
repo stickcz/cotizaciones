@@ -1,0 +1,46 @@
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Dashboard de Gestión DPTECH</title>
+    <!-- Bootstrap 4 CSS (CDN) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <!-- Font Awesome CSS (CDN) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- AdminLTE CSS (CDN) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+</head>
+    <div class="container">
+       
+        <div class="card card-primary">
+            
+            <div class="card-header">
+              <h3 class="card-title">Editar Información de la Empresa</h3>
+            </div>
+            <!-- /.card-header -->
+            <form action="/company_info" method="POST">
+                <div class="row">
+                <div class="col-sm-6">
+                <div class="form-group">
+                <input type="text" name="city" value="<%= company.city %>" required><br>
+                </div>
+            </div>
+                <div class="col-sm-6">
+                <div class="form-group">
+                <input type="text" name="date" value="<%= company.date %>" required><br>
+            </div>
+        </div>
+    </div>
+                <input type="text" name="name" value="<%= company.name %>" required><br>
+                <input type="text" name="phone" value="<%= company.phone %>" required><br>
+                <input type="email" name="email" value="<%= company.email %>" required><br>
+                <input type="text" name="website" value="<%= company.website %>" required><br>
+                <button type="submit">Guardar</button>
+                
+            </form>
+
+           
+            
+            <!-- /.card-body -->
+          </div>
+    </div>

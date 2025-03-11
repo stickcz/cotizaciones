@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Dashboard de Gestión DPTECH</title>
+    <!-- Bootstrap 4 CSS (CDN) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <!-- Font Awesome CSS (CDN) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- AdminLTE CSS (CDN) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+    <div class="wrapper">
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="#" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="#" class="nav-link">Contact</a>
+                </li>
+            </ul>
+            <form class="form-inline ml-3">
+                <div class="input-group input-group-sm">
+                    <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+                    <div class="input-group-append">
+                        <button class="btn btn-navbar" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Sidebar Container -->
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <a href="#" class="brand-link">
+                <img src="https://scontent.feoh11-1.fna.fbcdn.net/v/t39.30808-6/309450787_530191355773347_1930846317585276991_n.png?_nc_cat=104&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=kiO1SkiUUMUQ7kNvgE1n5OH&_nc_oc=AdgFskbLU1MMr5wcQMNE3A33Zm2ACGUpbkMueZeoPWLz0ypJ2ibHKDFYkf0V6WKbmbg&_nc_zt=23&_nc_ht=scontent.feoh11-1.fna&_nc_gid=AH6uGzdc_T-rBFC01la3m4B&oh=00_AYHeOeEdO2UnldW6Ns4Kdr7w07LY0xQwpM2XWFCMR5-KLg&oe=67D330BA" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+                <span class="brand-text font-weight-light">DPTECH</span>
+            </a>
+            <div class="sidebar">
+                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                    <div class="image">
+                        <img src="https://scontent.feoh11-1.fna.fbcdn.net/v/t39.30808-1/297280153_8223883027636941_3065647301383225366_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=104&ccb=1-7&_nc_sid=1d2534&_nc_ohc=6iPn8Xkgb9cQ7kNvgHzftkW&_nc_oc=AdhlXomTKCh9wYZadTDwO3z835b_itzZC1ZbJvD8DRdG5PzkK1A1NRwjEZLJrRpTxMk&_nc_zt=24&_nc_ht=scontent.feoh11-1.fna&_nc_gid=AqYHCgNws5JhkogH9TN_QVw&oh=00_AYGvg-3Sup8hLraAbPe38tDmnqdo4hFRpEmIWevxB82l-g&oe=67D3352D" class="img-circle elevation-2" alt="User Image">
+                    </div>
+                    <div class="info">
+                        <a href="#" class="d-block">stick</a>
+                    </div>
+                </div>
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-camera"></i>
+                                <p>Gestionar Cámaras</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-video"></i>
+                                <p>Gestionar Grabadores</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-tools"></i>
+                                <p>Gestionar Costos de Instalación</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-cogs"></i>
+                                <p>Gestionar Accesorios</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-plug"></i>
+                                <p>Gestionar Cables</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-shield-alt"></i>
+                                <p>Gestionar Protección de Cables</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-file-alt"></i>
+                                <p>Crear Cotización</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" onclick="loadContent('/quotes')">
+                                <i class="nav-icon fas fa-list"></i>
+                                <p>Ver Lista de Cotizaciones</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" onclick="loadContent('/company_info')">
+                                <i class="nav-icon fas fa-building"></i>
+                                <p>Editar Información de la Empresa</p>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Content Wrapper -->
+        <div class="content-wrapper">
+            <!-- Content Header -->
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0">Dashboard</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item active">Dashboard v3</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <section class="content">
+                <iframe id="content-frame" style="width:100%; height:100%; border:none;"></iframe>
+            </section>
+        </div>
+    </div>
+    <script>
+        // Función para cargar contenido en el iframe
+        const sidenav = document.querySelector('.sidenav');
+const toggleBtn = document.createElement('button');
+toggleBtn.textContent = '☰';
+toggleBtn.style.position = 'absolute';
+toggleBtn.style.top = '20px';
+toggleBtn.style.left = '260px';
+toggleBtn.style.background = '#00ddeb';
+toggleBtn.style.border = 'none';
+toggleBtn.style['padding'] = '5px 10px';
+toggleBtn.style.cursor = 'pointer';
+document.body.appendChild(toggleBtn);
+
+toggleBtn.addEventListener('click', () => {
+    sidenav.classList.toggle('collapsed');
+    if (sidenav.classList.contains('collapsed')) {
+        sidenav.style.width = '60px';
+        sidenav.querySelectorAll('a').forEach(a => a.style.display = 'none');
+    } else {
+        sidenav.style.width = '250px';
+        sidenav.querySelectorAll('a').forEach(a => a.style.display = 'block');
+    }
+});
+
+function loadContent(url) {
+    const iframe = document.getElementById('content-frame');
+    iframe.src = url;
+    iframe.onload = function() {
+        // Ajusta la altura del iframe al tamaño del contenido
+        iframe.style.height = iframe.contentWindow.document.body.scrollHeight + 'px';
+    };
+}
+    </script>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+</body>
+</html>

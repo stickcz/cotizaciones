@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotización de Sistema de Seguridad</title>
+    <link rel="stylesheet" href="/cotizaciones_style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-left">
+                <img src="/logo.png" alt="Logo Empresa" style="display:none;">
+            </div>
+            <div class="header-right">
+                <%= company.city %>, <%= company.date %><br>
+                <%= company.name %><br>
+                Tel: <%= company.phone %><br>
+                Correo: <%= company.email %><br>
+                <%= company.website %>
+            </div>
+        </div>
+
+        <h1>COTIZACIÓN DE SISTEMA DE SEGURIDAD</h1>
+        <p>Señores: <%= quote.name %></p>
+
+        <% if (items.some(item => item.item_type === 'recorder')) { %>
+            <h2>DISPOSITIVOS DE GRABACIÓN</h2>
+            <table>
+                <tr>
+                    <th>Modelo</th>
+                    <th>Cantidad</th>
+                    <th>Precio Aprox. (COP)</th>
+                    <th>Total (COP)</th>
+                </tr>
+                <% items.filter(item => item.item_type === 'recorder').forEach(item => { %>
+                    <tr>
+                        <td><%= item.recorder_model %></td>
+                        <td class="numeric"><%= item.quantity %></td>
+                        <td class="numeric"><%= item.recorder_price %></td>
+                        <td class="numeric"><%= (parseInt(item.recorder_price.replace(/\./g, '')) * item.quantity).toLocaleString('es-CO') %></td>
+                    </tr>
+                <% }) %>
+            </table>
+        <% } %>
+
+        <% if (items.some(item => item.item_type === 'camera')) { %>
+            <h2>DISPOSITIVOS DE CÁMARAS</h2>
+            <table>
+                <tr>
+                    <th>Modelo</th>
+                    <th>Cantidad</th>
+                    <th>Precio Aprox. (COP)</th>
+                    <th>Total (COP)</th>
+                </tr>
+                <% items.filter(item => item.item_type === 'camera').forEach(item => { %>
+                    <tr>
+                        <td><%= item.camera_model %></td>
+                        <td class="numeric"><%= item.quantity %></td>
+                        <td class="numeric"><%= item.camera_price %></td>
+                        <td class="numeric"><%= (parseInt(item.camera_price.replace(/\./g, '')) * item.quantity).toLocaleString('es-CO') %></td>
+                    </tr>
+                <% }) %>
+            </table>
+        <% } %>
+
+        <% if (items.some(item => item.item_type === 'installation')) { %>
+            <h2>COSTO DE INSTALACIÓN (POR CÁMARA)</h2>
+            <table>
+                <tr>
+                    <th>Condición</th>
+                    <th>Cantidad</th>
+                    <th>Precio (COP)</th>
+                    <th>Total (COP)</th>
+                </tr>
+                <% items.filter(item => item.item_type === 'installation').forEach(item => { %>
+                    <tr>
+                        <td><%= item.installation_condition %></td>
+                        <td class="numeric"><%= item.quantity %></td>
+                        <td class="numeric"><%= item.installation_price %></td>
+                        <td class="numeric"><%= (parseInt(item.installation_price.replace(/\./g, '')) * item.quantity).toLocaleString('es-CO') %></td>
+                    </tr>
+                <% }) %>
+            </table>
+        <% } %>
+
+        <% if (items.some(item => item.item_type === 'accessory')) { %>
+            <h2>ACCESORIOS POR CÁMARA</h2>
+            <table>
+                <tr>
+                    <th>Accesorio</th>
+                    <th>Cantidad</th>
+                    <th>Precio (COP)</th>
+                    <th>Total (COP)</th>
+                </tr>
+                <% items.filter(item => item.item_type === 'accessory').forEach(item => { %>
+                    <tr>
+                        <td><%= item.accessory_name %></td>
+                        <td class="numeric"><%= item.quantity %></td>
+                        <td class="numeric"><%= item.accessory_price %></td>
+                        <td class="numeric"><%= (parseInt(item.accessory_price.replace(/\./g, '')) * item.quantity).toLocaleString('es-CO') %></td>
+                    </tr>
+                <% }) %>
+            </table>
+        <% } %>
+
+        <% if (items.some(item => item.item_type === 'cable')) { %>
+            <h2>COSTO DE CABLE POR METRO</h2>
+            <table>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Metros</th>
+                    <th>Precio por Metro (COP)</th>
+                    <th>Total (COP)</th>
+                </tr>
+                <% items.filter(item => item.item_type === 'cable').forEach(item => { %>
+                    <tr>
+                        <td><%= item.cable_type %></td>
+                        <td class="numeric"><%= item.quantity %></td>
+                        <td class="numeric"><%= item.cable_price %></td>
+                        <td class="numeric"><%= (parseInt(item.cable_price.replace(/\./g, '')) * item.quantity).toLocaleString('es-CO') %></td>
+                    </tr>
+                <% }) %>
+            </table>
+        <% } %>
+
+        <% if (items.some(item => item.item_type === 'protection')) { %>
+            <h2>COSTO DE PROTECCIÓN PARA CABLES (POR 2 METROS, OPCIONAL)</h2>
+            <table>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Cantidad (2m)</th>
+                    <th>Precio por 2m (COP)</th>
+                    <th>Total (COP)</th>
+                </tr>
+                <% items.filter(item => item.item_type === 'protection').forEach(item => { %>
+                    <tr>
+                        <td><%= item.protection_type %></td>
+                        <td class="numeric"><%= item.quantity %></td>
+                        <td class="numeric"><%= item.protection_price %></td>
+                        <td class="numeric"><%= (parseInt(item.protection_price.replace(/\./g, '')) * item.quantity).toLocaleString('es-CO') %></td>
+                    </tr>
+                <% }) %>
+            </table>
+        <% } %>
+
+        <div class="footer">
+            [Firma]       <%= company.phone %>       <%= company.email %>
+        </div>
+    </div>
+</body>
+</html>

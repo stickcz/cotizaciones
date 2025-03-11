@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Cables</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Gestionar Cables</h1>
+        <a href="/">Volver al Dashboard</a>
+        
+        <!-- Formulario para agregar nuevo cable -->
+        <h2>Agregar Cable</h2>
+        <form action="/manage_cables" method="POST">
+            <input type="text" name="type" placeholder="Tipo" required><br>
+            <input type="text" name="category" placeholder="Categoría" required><br>
+            <input type="text" name="price_per_meter" placeholder="Precio por Metro (COP)" required><br>
+            <button type="submit">Agregar</button>
+        </form>
+
+        <!-- Lista de cables -->
+        <h2>Cables Existentes</h2>
+        <table>
+            <tr>
+                <th>Tipo</th>
+                <th>Categoría</th>
+                <th>Precio por Metro</th>
+                <th>Acciones</th>
+            </tr>
+            <% cables.forEach(cable => { %>
+                <tr>
+                    <td><%= cable.type %></td>
+                    <td><%= cable.category %></td>
+                    <td class="numeric"><%= cable.price_per_meter %></td>
+                    <td>
+                        <form action="/manage_cables/edit/<%= cable.id %>" method="GET" style="display:inline;">
+                            <button type="submit">Editar</button>
+                        </form>
+                        <form action="/manage_cables/delete/<%= cable.id %>" method="POST" style="display:inline;">
+                            <button type="submit">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }) %>
+        </table>
+    </div>
+</body>
+</html>
